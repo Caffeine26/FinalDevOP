@@ -1,0 +1,48 @@
+---
+- name: Laravel Kubernetes Deployment Automation (Simplified)
+  hosts: localhost
+  gather_facts: false
+
+  vars:
+    web_pod_label: "app=laravel-app"
+    mysql_pod_label: "app=laravel-app"
+    laravel_path: "/var/www/html"
+    mysql_root_password: "Hello@123"
+    mysql_database: "sor-sonit-db"
+    backup_file: "/tmp/sor-sonit-db-backup.sql"
+
+  tasks:
+    - name: Get the name of the web server pod
+      shell: kubectl get pods -l {{ web_pod_label }} -o jsonpath="{.items[0].metadata.name}"
+      register: web_pod
+
+    - name: Debug web pod name
+      debug:
+        msg: "Web Pod is {{ web_pod.stdout }}"
+
+    - name: Get the name of the MySQL pod
+      shell: kubectl get pods -l {{ mysql_pod_label }} -o jsonpath="{.items[0].metadata.name}"
+      register: mysql_pod
+
+    - name: Debug MySQL pod name
+      debug:
+        msg: "MySQL Pod is {{ mysql_pod.stdout }}"
+
+    - name: Backup MySQL DB inside pod
+      shell: |
+        kubectl exec {{ mysql_pod.stdout }} -c mysql -- \
+        sh -c "mysqldump -u root -p{{ mysql_root_password }} {{ mysql_database }} > {{ backup_file }}"
+      register: mysql_backup
+
+    - name: Debug MySQL backup result
+      debug:
+        var: mysql_backup.stdout_lines
+
+    - name: Copy backup file to local machine
+      shell: |
+        kubectl cp {{ mysql_pod.stdout }}:{{ backup_file }} ./sor-sonit-db-backup.sql -c mysql
+      register: backup_copy
+
+    - name: Debug backup copy result
+      debug:
+        var: backup_copy.stdout_lines
