@@ -34,10 +34,10 @@ pipeline {
                     to: 'srengty@gmail.com',
                     subject: "Build Success: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                     body: """\
-                        Build succeeded for *${env.JOB_NAME}* #${env.BUILD_NUMBER}
-                         Project: ${env.GIT_URL}
-                         Console Output: ${env.BUILD_URL}
-                        """
+Build succeeded for *${env.JOB_NAME}* #${env.BUILD_NUMBER}
+Project: ${env.GIT_URL}
+Console Output: ${env.BUILD_URL}
+"""
                 )
             }
         }
@@ -46,12 +46,12 @@ pipeline {
             script {
                 emailext(
                     to: 'srengty@gmail.com',
-                    subject: " Build Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                    subject: "Build Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                     body: """\
-                        Build failed for *${env.JOB_NAME}* #${env.BUILD_NUMBER}
-                        Project: ${env.GIT_URL}
-                        Console Output: ${env.BUILD_URL}
-                        """
+Build failed for *${env.JOB_NAME}* #${env.BUILD_NUMBER}
+Project: ${env.GIT_URL}
+Console Output: ${env.BUILD_URL}
+"""
                 )
             }
         }
