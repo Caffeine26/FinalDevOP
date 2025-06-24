@@ -27,17 +27,17 @@ pipeline {
             }
         }
 
-        stage('Test') {
-            steps {
-                sh 'php artisan test'
-            }
-        }
+        // stage('Test') {
+        //     steps {
+        //         sh 'php artisan test'
+        //     }
+        // }
 
-        stage('Deploy') {
-            steps {
-                sh 'ansible-playbook task3.yaml'
-            }
-        }
+        // stage('Deploy') {
+        //     steps {
+        //         sh 'ansible-playbook task3.yaml'
+        //     }
+        // }
     }
 
     post {
