@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        CC_EMAIL = 'srengty@gmail.com'
+        CC_EMAIL = 'sorsonit06@gmail.com'
         GIT_URL = 'https://github.com/Caffeine26/FinalDevOP.git'
         BRANCH = 'main'
     }
