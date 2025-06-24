@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: laravel-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: laravel-app
+  template:
+    metadata:
+      labels:
+        app: laravel-app
+    spec:
+      containers:
+        - name: web-server
+          image: php:8.2-fpm-alpine
+          ports:
+            - containerPort: 8080
+            - containerPort: 22
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              apk add --no-cache \
+              nginx \
+              openssh \
+              php \
+              php-mysqli \
+              php-pdo \
+              php-pdo_mysql \
+              php-mbstring \
+              php-xml \
+              php-curl \
+              php-tokenizer \
+              php-session \
+              php-fileinfo && \
+              mkdir -p /run/nginx && \
+              nginx && \
+              php-fpm
+        - name: mysql
+          image: mysql:8.0
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: "Hello@123"
+            - name: MYSQL_DATABASE
+              value: "sor-sonit-db"
+          ports:
+            - containerPort: 3306
+          volumeMounts:
+            - name: mysql-data
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: mysql-data
+          emptyDir: {}
