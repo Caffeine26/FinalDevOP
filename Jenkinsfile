@@ -7,14 +7,15 @@ pipeline {
         BRANCH = 'main'
     }
 
-    options {
-        pollSCM('H/5 * * * *')  // Poll every 5 minutes
+    triggers {
+        pollSCM('H/5 * * * *')  // ✅ Correct location for SCM polling
     }
 
     stages {
         stage('Checkout') {
             steps {
-                checkout([$class: 'GitSCM', branches: [[name: "*/${BRANCH}"]], userRemoteConfigs: [[url: "${GIT_URL}"]]])
+                checkout([$class: 'GitSCM', branches: [[name: "*/${BRANCH}"]],
+                          userRemoteConfigs: [[url: "${GIT_URL}"]]])
             }
         }
 
@@ -46,8 +47,12 @@ pipeline {
                 emailext(
                     to: commitEmail,
                     cc: env.CC_EMAIL,
-                    subject: "Build Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                    body: "Build failed for ${env.JOB_NAME} #${env.BUILD_NUMBER}. Check Jenkins for details."
+                    subject: "❌ Build Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                    body: """\
+Build failed for ${env.JOB_NAME} #${env.BUILD_NUMBER}.
+Project: ${env.GIT_URL}
+Check Jenkins console: ${env.BUILD_URL}
+"""
                 )
             }
         }
