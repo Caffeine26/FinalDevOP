@@ -45,7 +45,7 @@ pipeline {
             script {
                 // def commitEmail = sh(script: "git log -1 --pretty=format:'%ae'", returnStdout: true).trim()
                 emailext(
-                    to: srengty@gmail.com,
+                    to: 'srengty@gmail.com',
                     cc: env.CC_EMAIL,
                     subject: "Build Success: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                     body: """\
@@ -61,7 +61,7 @@ Check Jenkins console: ${env.BUILD_URL}
             script {
                 // def commitEmail = sh(script: "git log -1 --pretty=format:'%ae'", returnStdout: true).trim()
                 emailext(
-                    to: srengty@gmail.com,
+                    to: 'srengty@gmail.com',
                     cc: env.CC_EMAIL,
                     subject: "Build Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                     body: """\
