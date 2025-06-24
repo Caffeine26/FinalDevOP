@@ -8,7 +8,7 @@ pipeline {
     }
 
     triggers {
-        pollSCM('H/5 * * * *')  // ✅ Correct location for SCM polling
+        pollSCM('H/5 * * * *')
     }
 
     stages {
@@ -41,6 +41,22 @@ pipeline {
     }
 
     post {
+        success {
+            script {
+                def commitEmail = sh(script: "git log -1 --pretty=format:'%ae'", returnStdout: true).trim()
+                emailext(
+                    to: commitEmail,
+                    cc: env.CC_EMAIL,
+                    subject: "✅ Build Success: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                    body: """\
+Build succeeded for ${env.JOB_NAME} #${env.BUILD_NUMBER}.
+Project: ${env.GIT_URL}
+Check Jenkins console: ${env.BUILD_URL}
+"""
+                )
+            }
+        }
+
         failure {
             script {
                 def commitEmail = sh(script: "git log -1 --pretty=format:'%ae'", returnStdout: true).trim()
