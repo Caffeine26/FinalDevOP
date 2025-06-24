@@ -31,7 +31,7 @@ pipeline {
         success {
             script {
                 emailext(
-                    to: 'srengty@gmail.com,sorsonit06@gmail.com',
+                    to: 'srengty@gmail.com',
                     subject: "Build Success: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                     body: """\
                         Build succeeded for *${env.JOB_NAME}* #${env.BUILD_NUMBER}
@@ -45,7 +45,7 @@ pipeline {
         failure {
             script {
                 emailext(
-                    to: 'srengty@gmail.com,sorsonit06@gmail.com',
+                    to: 'srengty@gmail.com',
                     subject: " Build Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                     body: """\
                         Build failed for *${env.JOB_NAME}* #${env.BUILD_NUMBER}
